@@ -121,11 +121,11 @@ namespace Neptune.NDE
                     }
                     if (MouseManager.MouseState == MouseState.Left)
                     {
-                        if ((MouseManager.X >= wind.PositionX && MouseManager.X <= wind.PositionX + wind.SizeX) && (MouseManager.Y >= wind.PositionY - 30 && MouseManager.Y <= wind.PositionY))
+                        if ((MouseManager.X >= wind.PositionX && MouseManager.X <= wind.PositionX + wind.SizeX-30) && (MouseManager.Y >= wind.PositionY - 30 && MouseManager.Y <= wind.PositionY))
                         {
                             if (wind.HasTitleBar)
                             {
-                                if (!draggingwindow) { draggingwindow = true; draggingx = MouseManager.X; draggingy = MouseManager.Y; draggingindex = i; draggingoldx = (uint)wind.PositionX; draggingoldy = (uint)wind.PositionY; }
+                                if (!draggingwindow) { draggingwindow = true; draggingx = MouseManager.X; draggingy = MouseManager.Y; draggingindex = i; draggingoldx = (uint)wind.PositionX; draggingoldy = (uint)wind.PositionY; wind.Dragging = true; }
                             }
                         }
                         if ((MouseManager.X >= wind.PositionX && MouseManager.X <= wind.PositionX + wind.SizeX) && (MouseManager.Y >= wind.PositionY - 30 && MouseManager.Y <= wind.PositionY + wind.SizeY))
@@ -136,6 +136,7 @@ namespace Neptune.NDE
                     else
                     {
                         draggingwindow = false;
+                        wind.Dragging = false;
                     }
                     if (draggingwindow && draggingindex == i)
                     {

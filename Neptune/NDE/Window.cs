@@ -16,6 +16,7 @@ namespace Neptune.NDE
         public bool Closed = false;
         private Color color;
         public bool Active = true;
+        public bool Dragging = false;
         public bool HasTitleBar = true;
         public abstract void Draw();
         public abstract void Open();
@@ -47,7 +48,7 @@ namespace Neptune.NDE
                     }
                 }
                 NDEManager.screen.DrawString(titlesh, PCScreenFont.Default, Color.White, PositionX + 3, PositionY - 22);
-                if (MouseManager.MouseState == MouseState.Left)
+                if (MouseManager.MouseState == MouseState.Left && !Dragging)
                 {
                     if ((MouseManager.X >= PositionX + SizeX - 30 && MouseManager.X <= PositionX + SizeX) && (MouseManager.Y >= PositionY - 30 && MouseManager.Y <= PositionY))
                     {
