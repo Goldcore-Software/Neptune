@@ -18,6 +18,7 @@ namespace Neptune.NDE.Windows
             startlabel.Draw();
             msgboxbutton.Draw();
             taskmanagerbutton.Draw();
+            aboutbutton.Draw();
         }
 
         public override void Open()
