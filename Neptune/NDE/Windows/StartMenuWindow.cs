@@ -70,15 +70,15 @@ namespace Neptune.NDE.Windows
             }
             if (taskmanagerbutton.Run())
             {
-                /*TaskManagerWindow taskmanager = new TaskManagerWindow
+                TaskManagerWindow taskmanager = new TaskManagerWindow
                 {
                     PositionX = 200,
                     PositionY = 200,
                     SizeX = 200,
                     SizeY = 300
                 };
-                NDEManager.OpenWindow(taskmanager);*/
-                NDEMessageBox.ShowMsgBox("Note","This feature is not complete.",150,300,400);
+                NDEManager.OpenWindow(taskmanager);
+                //NDEMessageBox.ShowMsgBox("Note","This feature is not complete.",150,300,400);
                 Close();
             }
             if (aboutbutton.Run())

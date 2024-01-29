@@ -9,50 +9,29 @@ namespace Neptune.NDE.Windows
 {
     public class TaskManagerWindow : Window
     {
-        private List<Label> labels = new List<Label>();
+        private Label label;
         private List<string> windows = new List<string>();
         public override void Draw()
         {
-            
+            label.PositionX = PositionX + 2;
+            label.PositionY = PositionY + 2;
             windows.Clear();
             foreach (var wind in NDEManager.Windows)
             {
                 windows.Add(wind.Title);
             }
-            int i = 0;
-            
+            label.Text = "";
             foreach (var title in windows)
             {
-                if (SizeY > 2 + (i * 18))
-                {
-                    // start
-                    /*if (labels.Count < i)
-                    {
-                        labels[i] = new Label();
-                        labels[i].PositionX = PositionX + 2;
-                        labels[i].PositionY = PositionY + 2 + (i * 18);
-                    }
-                    labels[i].Text = title;*/
-                    // end
-                }
-                i++;
+                label.Text += title+"\n";
             }
-            i = 0;
-            foreach (var label in labels)
-            {
-                if (NDEManager.Windows.Count-1 <= i)
-                {
-                    label.Text = "";
-                }
-            
-                label.Draw();
-                i++;
-            }
+            label.Draw();
         }
 
         public override void Open()
         {
             Title = "Task List";
+            label = new Label();
         }
 
         public override void Run()

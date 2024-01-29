@@ -8,7 +8,13 @@ namespace Neptune.NDE.Controls
         public string Text = "Label";
         public override void Draw()
         {
-            NDEManager.screen.DrawString(Text, PCScreenFont.Default,Color.Black,PositionX,PositionY);
+            string[] splitstring = Text.Split('\n');
+            int i = 0;
+            foreach (string line in splitstring)
+            {
+                NDEManager.screen.DrawString(splitstring[i], PCScreenFont.Default, Color.Black, PositionX, PositionY+(i*18));
+                i++;
+            }
         }
     }
 }

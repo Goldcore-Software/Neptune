@@ -18,7 +18,7 @@ namespace Neptune
         public static bool graphicsmode = false;
         public readonly static int majorversion = 1;
         public readonly static int minorversion = 0;
-        public readonly static int commit = 3; // only update on commits that change the code! if you are just changing the readme or some assets then don't increment this
+        public readonly static int commit = 4; // only update on commits that change the code! if you are just changing the readme or some assets then don't increment this
         public readonly static string branch = "Development";
         public readonly static string OSName = "Neptune";
         public readonly static string VersionString = OSName + " " + branch + " " + majorversion.ToString() + "." + minorversion.ToString() + "-" + commit;
