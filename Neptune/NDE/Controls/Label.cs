@@ -1,5 +1,5 @@
-﻿using Cosmos.System.Graphics.Fonts;
-using System.Drawing;
+﻿using GrapeGL.Graphics.Fonts;
+using GrapeGL.Graphics;
 
 namespace Neptune.NDE.Controls
 {
@@ -12,7 +12,7 @@ namespace Neptune.NDE.Controls
             int i = 0;
             foreach (string line in splitstring)
             {
-                NDEManager.screen.DrawString(splitstring[i], PCScreenFont.Default, Color.Black, PositionX, PositionY+(i*18));
+                NDEManager.screen.DrawString(PositionX, PositionY+(i*18), splitstring[i], Font.Fallback, Color.Black);
                 i++;
             }
         }

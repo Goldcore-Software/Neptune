@@ -1,11 +1,5 @@
-﻿using Cosmos.System.Graphics.Fonts;
+﻿using GrapeGL.Graphics.Fonts;
 using Neptune.NDE.Controls;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Neptune.NDE.Windows
 {
@@ -19,7 +13,7 @@ namespace Neptune.NDE.Windows
             okbutton.PositionX = PositionX + SizeX - 70;
             okbutton.PositionY = PositionY + SizeY - 35;
             okbutton.Draw();
-            NDEManager.screen.DrawString(message,PCScreenFont.Default,Color.Black,PositionX+5, PositionY + ((SizeY / 2) - 20));
+            NDEManager.screen.DrawString(PositionX+5, PositionY + ((SizeY / 2) - 20),message, Font.Fallback, GrapeGL.Graphics.Color.Black);
         }
 
         public override void Open()

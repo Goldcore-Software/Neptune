@@ -1,14 +1,16 @@
 ﻿using Cosmos.Core.Memory;
-using Cosmos.System.Graphics.Fonts;
+//using Cosmos.System.Graphics.Fonts;
 using Microsoft.Win32;
 using Neptune.NDE;
 using Neptune.Terminal;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using Sys = Cosmos.System;
+using GrapeGL.Hardware.GPU;
+using GrapeGL.Graphics;
+using GrapeGL.Graphics.Fonts;
 
 namespace Neptune
 {
@@ -18,7 +20,7 @@ namespace Neptune
         public static bool graphicsmode = false;
         public readonly static int majorversion = 1;
         public readonly static int minorversion = 0;
-        public readonly static int commit = 4; // only update on commits that change the code! if you are just changing the readme or some assets then don't increment this
+        public readonly static int commit = 5; // only update on commits that change the code! if you are just changing the readme or some assets then don't increment this
         public readonly static string branch = "Development";
         public readonly static string OSName = "Neptune";
         public readonly static string VersionString = OSName + " " + branch + " " + majorversion.ToString() + "." + minorversion.ToString() + "-" + commit;
@@ -83,8 +85,8 @@ namespace Neptune
                         NDEManager.Windows.Clear();
                         Heap.Collect();
                         NDEManager.screen.Clear(Color.Red);
-                        NDEManager.screen.DrawString(e.ToString(), PCScreenFont.Default, Color.White, 2, 2);
-                        NDEManager.screen.Display();
+                        NDEManager.screen.DrawString(2, 2, e.ToString(), Font.Fallback, Color.White);
+                        NDEManager.screen.Update();
                         running = false;
                     }
                 }

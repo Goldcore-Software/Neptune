@@ -1,4 +1,4 @@
-﻿using Cosmos.System.Graphics;
+﻿using GrapeGL.Graphics;
 using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,6 @@ namespace Neptune.NDE
     {
         [ManifestResourceStream(ResourceName = "Neptune.Resources.cursor.bmp")]
         public static byte[] cursorbytes;
-        public static Image cursor;
+        public static Canvas cursor;
     }
 }

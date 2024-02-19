@@ -1,6 +1,6 @@
 ﻿using Cosmos.System;
-using Cosmos.System.Graphics.Fonts;
-using System.Drawing;
+using GrapeGL.Graphics;
+using GrapeGL.Graphics.Fonts;
 
 namespace Neptune.NDE.Controls
 {
@@ -9,8 +9,8 @@ namespace Neptune.NDE.Controls
         public string Text = "Button";
         public override void Draw()
         {
-            NDEManager.screen.DrawRectangle(Color.Black,PositionX,PositionY,SizeX,SizeY);
-            NDEManager.screen.DrawString(Text,PCScreenFont.Default,Color.Black,PositionX+5,(PositionY+(SizeY/2))-8);
+            NDEManager.screen.DrawRectangle(PositionX,PositionY, (ushort)SizeX, (ushort)SizeY, 0, Color.Black);
+            NDEManager.screen.DrawString(PositionX+5,(PositionY+(SizeY/2))-8, Text, Font.Fallback, Color.Black);
         }
 
         public bool Run()

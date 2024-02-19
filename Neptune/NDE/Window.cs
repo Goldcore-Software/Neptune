@@ -1,7 +1,7 @@
-﻿using Cosmos.System;
-using Cosmos.System.Graphics.Fonts;
-using System;
-using System.Drawing;
+﻿using System;
+using Cosmos.System;
+using GrapeGL.Graphics;
+using GrapeGL.Graphics.Fonts;
 
 namespace Neptune.NDE
 {
@@ -23,14 +23,14 @@ namespace Neptune.NDE
         public abstract void Run();
         public void DrawTitleBar()
         {
-            if (Active) { color = Color.DarkViolet; } else { color = Color.Gray; }
+            if (Active) { color = Color.UbuntuPurple; } else { color = Color.LightGray; }
             if (HasTitleBar)
             {
-                NDEManager.screen.DrawFilledRectangle(color, PositionX-1, PositionY - 30, SizeX+1, 30);
-                NDEManager.screen.DrawFilledRectangle(Color.Red, PositionX + SizeX - 29, PositionY - 30, 30, 30);
+                NDEManager.screen.DrawFilledRectangle(PositionX-1, PositionY - 30, (ushort)(SizeX + 1), 30, 0, color);
+                NDEManager.screen.DrawFilledRectangle(PositionX + SizeX - 29, PositionY - 30, 30, 30, 0, Color.Red);
             }
-            NDEManager.screen.DrawRectangle(color,PositionX-1,PositionY-1,SizeX+1,SizeY+1);
-            NDEManager.screen.DrawFilledRectangle(Color.White,PositionX,PositionY,SizeX,SizeY);
+            NDEManager.screen.DrawRectangle(PositionX-1,PositionY-1, (ushort)(SizeX + 1), (ushort)(SizeY + 1),0,color);
+            NDEManager.screen.DrawFilledRectangle(PositionX,PositionY, (ushort)SizeX, (ushort)SizeY,0,Color.White);
             if (HasTitleBar)
             {
                 titlesh = Title;
@@ -47,7 +47,7 @@ namespace Neptune.NDE
                         titlesh = titlesh + "...";
                     }
                 }
-                NDEManager.screen.DrawString(titlesh, PCScreenFont.Default, Color.White, PositionX + 3, PositionY - 22);
+                NDEManager.screen.DrawString(PositionX + 3, PositionY - 22, titlesh,Font.Fallback, Color.White);
                 if (MouseManager.MouseState == MouseState.Left && !Dragging)
                 {
                     if ((MouseManager.X >= PositionX + SizeX - 30 && MouseManager.X <= PositionX + SizeX) && (MouseManager.Y >= PositionY - 30 && MouseManager.Y <= PositionY))

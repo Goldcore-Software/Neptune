@@ -4,20 +4,24 @@ using System.ComponentModel;
 using System.Drawing;
 using Cosmos.Core.Memory;
 using Cosmos.System;
-using Cosmos.System.Graphics;
-using Cosmos.System.Graphics.Fonts;
 using IL2CPU.API.Attribs;
+using GrapeGL.Hardware.GPU;
+using GrapeGL.Graphics;
+using GrapeGL.Graphics.Fonts;
 using Neptune.NDE.Windows;
+using GrapeGL.Hardware.GPU.VESA;
+using Color = GrapeGL.Graphics.Color;
+using GrapeGL.Hardware.GPU.VMWare;
 
 namespace Neptune.NDE
 {
     internal class NDEManager
     {
-        public static VBECanvas screen;
-        public static Color desktopBackground = Color.DodgerBlue;
-        public static Color taskbarColor = Color.DarkViolet;
+        public static Display screen;
+        public static Color desktopBackground = Color.ClassicBlue;
+        public static Color taskbarColor = Color.UbuntuPurple;
         public static bool graphicsMode = false;
-        public static Image cursor;
+        public static Canvas cursor;
         public static List<Window> Windows = new List<Window>();
         public static int ActiveWindow = 0;
         public static int FPS = 0;
@@ -55,7 +59,7 @@ namespace Neptune.NDE
         }
         public static void Initialize()
         {
-            Resources.cursor = new Bitmap(Resources.cursorbytes);
+            Resources.cursor = Image.FromBitmap(Resources.cursorbytes);
         }
         /// <summary>
         /// Enables graphics mode.
@@ -64,13 +68,14 @@ namespace Neptune.NDE
         /// <param name="rows">The amount of rows in the display.</param>
         public static void ChangeToGraphicsMode(uint columns, uint rows)
         {
-            screen = (VBECanvas)FullScreenCanvas.GetFullScreenCanvas(new Mode(columns, rows, ColorDepth.ColorDepth32));
+            screen = SVGAIICanvas.GetDisplay((ushort)columns, (ushort)rows);
             DisplayColumns = columns;
             DisplayRows = rows;
             MouseManager.ScreenWidth = columns;
             MouseManager.ScreenHeight = rows;
+            screen.IsEnabled = true;
             screen.Clear(desktopBackground);
-            screen.Display();
+            screen.Update();
             graphicsMode = true;
             NDEMessageBox.ShowMsgBox("Message box test","Message Box!",200,100,100);
             NDEMessageBox.ShowMsgBox("Second box","This is a second box",200,130,190);
@@ -81,7 +86,7 @@ namespace Neptune.NDE
         public static void ExitGraphicsMode()
         {
             Windows.Clear();
-            screen.Disable();
+            screen.IsEnabled = false;
             graphicsMode = false;
         }
         /// <summary>
@@ -177,7 +182,7 @@ namespace Neptune.NDE
                 }
             }
             DrawCursor();
-            screen.Display();
+            screen.Update();
             framecount++;
             if (framecount >= 20)
             {
@@ -191,13 +196,13 @@ namespace Neptune.NDE
         public static void DrawDesktop()
         {
             screen.Clear(desktopBackground);
-            screen.DrawFilledRectangle(taskbarColor, 0, 0, (int)DisplayColumns-TaskbarHeight, TaskbarHeight);
-            screen.DrawFilledRectangle(Color.Aqua, (int)(DisplayColumns - TaskbarHeight), 0,TaskbarHeight,TaskbarHeight);
-            screen.DrawString("Neptune | FPS: " + FPS.ToString() + " | Active window: " + ActiveWindow.ToString(), PCScreenFont.Default,Color.White,5,8);
+            screen.DrawFilledRectangle(0, 0, (ushort)(DisplayColumns - TaskbarHeight), (ushort)TaskbarHeight, 0, taskbarColor);
+            screen.DrawFilledRectangle((int)(DisplayColumns - TaskbarHeight), 0, (ushort)TaskbarHeight, (ushort)TaskbarHeight,0,Color.GoogleBlue);
+            screen.DrawString(5,8, "Neptune | FPS: " + FPS.ToString() + " | Active window: " + ActiveWindow.ToString(), Font.Fallback, Color.White);
         }
         public static void DrawCursor()
         {
-            screen.DrawImageAlpha(Resources.cursor, (int)MouseManager.X, (int)MouseManager.Y);
+            screen.DrawImage((int)MouseManager.X, (int)MouseManager.Y, Resources.cursor, true);
         }
         public static void OpenWindow(Window window)
         {
