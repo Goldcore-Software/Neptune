@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cosmos.System;
 using GrapeGL.Graphics;
 using GrapeGL.Graphics.Fonts;
@@ -18,6 +19,8 @@ namespace Neptune.NDE
         public bool Active = true;
         public bool Dragging = false;
         public bool HasTitleBar = true;
+        public bool HasBody = true;
+        public bool Fullscreen = false;
         public abstract void Draw();
         public abstract void Open();
         public abstract void Run();
@@ -29,8 +32,11 @@ namespace Neptune.NDE
                 NDEManager.screen.DrawFilledRectangle(PositionX-1, PositionY - 30, (ushort)(SizeX + 1), 30, 0, color);
                 NDEManager.screen.DrawFilledRectangle(PositionX + SizeX - 29, PositionY - 30, 30, 30, 0, Color.Red);
             }
-            NDEManager.screen.DrawRectangle(PositionX-1,PositionY-1, (ushort)(SizeX + 1), (ushort)(SizeY + 1),0,color);
-            NDEManager.screen.DrawFilledRectangle(PositionX,PositionY, (ushort)SizeX, (ushort)SizeY,0,Color.White);
+            if (HasBody)
+            {
+                NDEManager.screen.DrawRectangle(PositionX - 1, PositionY - 1, (ushort)(SizeX + 1), (ushort)(SizeY + 1), 0, color);
+                NDEManager.screen.DrawFilledRectangle(PositionX, PositionY, (ushort)SizeX, (ushort)SizeY, 0, Color.White);
+            }
             if (HasTitleBar)
             {
                 titlesh = Title;

@@ -29,6 +29,7 @@ namespace Neptune.NDE
         public static uint DisplayRows = 0;
         public static int TaskbarHeight = 30;
         public static bool startmenuopen = false;
+        public static DesktopWindow desktop = new DesktopWindow();
 
         private static int framecount = 0;
         private static bool draggingwindow = false;
@@ -73,6 +74,7 @@ namespace Neptune.NDE
             DisplayRows = rows;
             MouseManager.ScreenWidth = columns;
             MouseManager.ScreenHeight = rows;
+            desktop.Open();
             screen.IsEnabled = true;
             screen.Clear(desktopBackground);
             screen.Update();
@@ -94,11 +96,21 @@ namespace Neptune.NDE
         /// </summary>
         public static void Draw()
         {
+            // TODO: seriously why does GrapeGL make my OS slower I now need to optimize this
             UpdateFPS();
-            DrawDesktop();
-
+            desktop.Draw();
             int i = 0;
             MouseState mouseState = MouseManager.MouseState;
+            bool draw = true;
+            // check if there is a full screen window that is active
+            if (Windows.Count != 0 && Windows.Count >= ActiveWindow + 1)
+            {
+                if (Windows[ActiveWindow].Fullscreen)
+                {
+                    draw = false;
+                }
+            }
+            // if there is, don't bother drawing any other window as the user won't see it anyway
             foreach (var wind in Windows)
             {
                 if (wind.Closed)
@@ -106,7 +118,7 @@ namespace Neptune.NDE
                     // delete the Window that has closed
                     Windows.Remove(wind);
                 }
-                else
+                else if (draw)
                 {
                     if (i != ActiveWindow)
                     {
@@ -120,13 +132,13 @@ namespace Neptune.NDE
                         }
                         catch (Exception e)
                         {
-                            NDEMessageBox.ShowMsgBox("Error in " + wind.Title,e.ToString(),200,30,50);
+                            NDEMessageBox.ShowMsgBox("Error in " + wind.Title, e.ToString(), 200, 30, 50);
                             Windows.RemoveAt(i);
                         }
                     }
                     if (MouseManager.MouseState == MouseState.Left)
                     {
-                        if ((MouseManager.X >= wind.PositionX && MouseManager.X <= wind.PositionX + wind.SizeX-30) && (MouseManager.Y >= wind.PositionY - 30 && MouseManager.Y <= wind.PositionY))
+                        if ((MouseManager.X >= wind.PositionX && MouseManager.X <= wind.PositionX + wind.SizeX - 30) && (MouseManager.Y >= wind.PositionY - 30 && MouseManager.Y <= wind.PositionY))
                         {
                             if (wind.HasTitleBar)
                             {
@@ -170,35 +182,16 @@ namespace Neptune.NDE
                     Windows.RemoveAt(ActiveWindow);
                 }
             }
-            if (!startmenuopen)
-            {
-                if (MouseManager.MouseState == MouseState.Left)
-                {
-                    if ((MouseManager.X >= DisplayColumns - TaskbarHeight) && MouseManager.Y <= TaskbarHeight)
-                    {
-                        startmenuopen = true;
-                        OpenWindow(new StartMenuWindow());
-                    }
-                }
-            }
+            desktop.Run();
             DrawCursor();
             screen.Update();
             framecount++;
+            
             if (framecount >= 20)
             {
                 Heap.Collect();
                 framecount = 0;
             }
-        }
-        /// <summary>
-        /// Draws the desktop.
-        /// </summary>
-        public static void DrawDesktop()
-        {
-            screen.Clear(desktopBackground);
-            screen.DrawFilledRectangle(0, 0, (ushort)(DisplayColumns - TaskbarHeight), (ushort)TaskbarHeight, 0, taskbarColor);
-            screen.DrawFilledRectangle((int)(DisplayColumns - TaskbarHeight), 0, (ushort)TaskbarHeight, (ushort)TaskbarHeight,0,Color.GoogleBlue);
-            screen.DrawString(5,8, "Neptune | FPS: " + FPS.ToString() + " | Active window: " + ActiveWindow.ToString(), Font.Fallback, Color.White);
         }
         public static void DrawCursor()
         {
