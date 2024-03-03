@@ -46,11 +46,11 @@ namespace Neptune.Terminal
                         if (!Directory.Exists(CurrentVol + ":\\" + CurrentDir))
                         {
                             CurrentDir = bdir;
-                            Console.WriteLine("Directory not found!");
+                            Kernel.tty.WriteLine("Directory not found!");
                         }
                         break;
                     case "cls":
-                        Console.Clear();
+                        Kernel.tty.Clear();
                         break;
                     case "logtest":
                         TerminalLogger.Log("Log Test!", "This is a test of the logger 1", LogType.Info);
@@ -60,7 +60,7 @@ namespace Neptune.Terminal
                         TerminalLogger.Log("Log Test!", "This is a test of the logger 5", LogType.Ok);
                         break;
                     case "crashtest":
-                        throw new Exception("you broke it.");
+                        throw new SystemException("you broke it.");
                     case "md":
                     case "mkdir":
                         Directory.CreateDirectory(GetFullPath(cmdsplit[1]));
@@ -76,31 +76,31 @@ namespace Neptune.Terminal
                     case "ls":
                         string[] filePaths = Directory.GetFiles(GetFullPath());
                         var drive = new DriveInfo(CurrentVol);
-                        Console.WriteLine("Volume in drive 0 is " + $"{drive.VolumeLabel}");
-                        Console.WriteLine("Directory of " + GetFullPath());
-                        Console.WriteLine("\n");
+                        Kernel.tty.WriteLine("Volume in drive 0 is " + $"{drive.VolumeLabel}");
+                        Kernel.tty.WriteLine("Directory of " + GetFullPath());
+                        Kernel.tty.WriteLine("\n");
                         if (filePaths.Length == 0 && Directory.GetDirectories(GetFullPath()).Length == 0)
                         {
-                            Console.WriteLine("File Not Found");
+                            Kernel.tty.WriteLine("File Not Found");
                         }
                         else
                         {
                             for (int i = 0; i < filePaths.Length; ++i)
                             {
                                 string path = filePaths[i];
-                                Console.WriteLine(Path.GetFileName(path));
+                                Kernel.tty.WriteLine(Path.GetFileName(path));
                             }
                             foreach (var d in Directory.GetDirectories(GetFullPath()))
                             {
                                 var dir = new DirectoryInfo(d);
                                 var dirName = dir.Name;
 
-                                Console.WriteLine(dirName + " <DIR>");
+                                Kernel.tty.WriteLine(dirName + " <DIR>");
                             }
                         }
-                        Console.WriteLine("\n");
-                        Console.WriteLine("        " + $"{drive.TotalSize}" + " bytes");
-                        Console.WriteLine("        " + $"{drive.AvailableFreeSpace}" + " bytes free");
+                        Kernel.tty.WriteLine("\n");
+                        Kernel.tty.WriteLine("        " + $"{drive.TotalSize}" + " bytes");
+                        Kernel.tty.WriteLine("        " + $"{drive.AvailableFreeSpace}" + " bytes free");
                         break;
                     case "writefile":
                         string contents = cmd.Substring(cmdsplit[0].Length + cmdsplit[1].Length + 2);
@@ -109,37 +109,37 @@ namespace Neptune.Terminal
                     case "cat":
                         if (File.Exists(GetFullPath(cmdsplit[1])))
                         {
-                            Console.WriteLine("File exists! (File.Exists())");
+                            Kernel.tty.WriteLine("File exists! (File.Exists())");
                         }
                         else
                         {
-                            Console.WriteLine("File does not exist! (File.Exists())");
+                            Kernel.tty.WriteLine("File does not exist! (File.Exists())");
                         }
-                        Console.WriteLine(File.ReadAllText(GetFullPath(cmdsplit[1])));
+                        Kernel.tty.WriteLine(File.ReadAllText(GetFullPath(cmdsplit[1])));
                         break;
                     case "debug":
                         switch (cmdsplit[1])
                         {
                             case "currentdir":
-                                Console.WriteLine(CurrentDir);
+                                Kernel.tty.WriteLine(CurrentDir);
                                 break;
                             case "currentvol":
-                                Console.WriteLine(CurrentVol);
+                                Kernel.tty.WriteLine(CurrentVol);
                                 break;
                             default:
                                 break;
                         }
                         break;
                     case "setup":
-                        Console.WriteLine("Setting up system drive...", 0);
+                        Kernel.tty.WriteLine("Setting up system drive...", 0);
                         Directory.CreateDirectory(CurrentVol + @":\Neptune");
                         Kernel.SystemDrive = int.Parse(CurrentVol);
                         Config.DefaultPath = Kernel.SystemDrive + @":\Neptune\sys.reg";
                         Config.SaveReg(CurrentVol + @":\Neptune\sys.reg");
-                        Console.WriteLine("You must reboot the system to finish setting up the system drive.", 0);
+                        Kernel.tty.WriteLine("You must reboot the system to finish setting up the system drive.", 0);
                         break;
                     case "reboot":
-                        Console.WriteLine("Restarting...", 0);
+                        Kernel.tty.WriteLine("Restarting...", 0);
                         if (!(Kernel.SystemDrive == -1))
                         {
                             Config.SaveReg();
@@ -151,7 +151,7 @@ namespace Neptune.Terminal
                         NDEManager.ChangeToGraphicsMode(800, 600);
                         break;
                     case "ver":
-                        Console.WriteLine(Kernel.VersionString);
+                        Kernel.tty.WriteLine(Kernel.VersionString);
                         break;
                     case "":
                         break;
@@ -165,20 +165,24 @@ namespace Neptune.Terminal
                             }
                             catch (Exception)
                             {
-                                Console.WriteLine("Could not change drive!");
+                                Kernel.tty.WriteLine("Could not change drive!");
                             }
                             break;
                         }
                         else
                         {
-                            Console.WriteLine("Command not found!");
+                            Kernel.tty.WriteLine("Command not found!");
                         }
                         break;
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(cmdsplit[0] + ": " + e.Message);
+                if (e.GetType().Name == "SystemException")
+                {
+                    throw;
+                }
+                Kernel.tty.WriteLine(cmdsplit[0] + ": " + e.Message);
             }
             
         }

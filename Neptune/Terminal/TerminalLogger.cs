@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrapeGL.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,45 +12,45 @@ namespace Neptune.Terminal
         public static int LogTerminal = 1;
         public static void Log(string messager, string message, LogType type)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("[" + messager + "] ", LogTerminal);
+            Kernel.tty.ForegroundColor = Color.White;
+            Kernel.tty.Write("[" + messager + "] ");
             switch (type)
             {
                 case LogType.Info:
-                    Console.Write("[INFO] ", LogTerminal);
+                    Kernel.tty.Write("[INFO] ");
                     break;
                 case LogType.Fatal:
-                    Console.Write("[", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("FATAL", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write("] ", LogTerminal);
+                    Kernel.tty.Write("[");
+                    Kernel.tty.ForegroundColor = Color.Red;
+                    Kernel.tty.Write("FATAL");
+                    Kernel.tty.ForegroundColor = Color.White;
+                    Kernel.tty.Write("] ");
                     break;
                 case LogType.Error:
-                    Console.Write("[", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("ERROR", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write("] ", LogTerminal);
+                    Kernel.tty.Write("[");
+                    Kernel.tty.ForegroundColor = Color.Red;
+                    Kernel.tty.Write("ERROR");
+                    Kernel.tty.ForegroundColor = Color.White;
+                    Kernel.tty.Write("] ");
                     break;
                 case LogType.Warning:
-                    Console.Write("[", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("WARN", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write("] ", LogTerminal);
+                    Kernel.tty.Write("[");
+                    Kernel.tty.ForegroundColor = Color.Yellow;
+                    Kernel.tty.Write("WARN");
+                    Kernel.tty.ForegroundColor = Color.White;
+                    Kernel.tty.Write("] ");
                     break;
                 case LogType.Ok:
-                    Console.Write("[", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("OK", LogTerminal);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write("] ", LogTerminal);
+                    Kernel.tty.Write("[");
+                    Kernel.tty.ForegroundColor = Color.Green;
+                    Kernel.tty.Write("OK");
+                    Kernel.tty.ForegroundColor = Color.White;
+                    Kernel.tty.Write("] ");
                     break;
                 default:
                     break;
             }
-            Console.WriteLine(message, LogTerminal);
+            Kernel.tty.WriteLine(message);
         }
     }
     enum LogType
