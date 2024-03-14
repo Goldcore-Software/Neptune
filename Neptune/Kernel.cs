@@ -22,20 +22,21 @@ namespace Neptune
         public static bool graphicsmode = false;
         public readonly static int majorversion = 1;
         public readonly static int minorversion = 0;
-        public readonly static int commit = 7; // only update on commits that change the code! if you are just changing the readme or some assets then don't increment this
+        public readonly static int commit = 8; // only update on commits that change the code! if you are just changing the readme or some assets then don't increment this
         public readonly static string branch = "Development";
         public readonly static string OSName = "Neptune";
         public readonly static string VersionString = OSName + " " + branch + " " + majorversion.ToString() + "." + minorversion.ToString() + "-" + commit;
         public static SVGAIITerminal.SVGAIITerminal tty;
+        public static Sys.FileSystem.CosmosVFS fs;
         public static int SystemDrive { get; set; } = -1;
         protected override void BeforeRun()
         {
             try
             {
-                tty = new SVGAIITerminal.SVGAIITerminal(800, 600, new AcfFontFace(new MemoryStream(Resources.cascadia)));
+                tty = new SVGAIITerminal.SVGAIITerminal(800, 600, new AcfFontFace(new MemoryStream(Resources.vga18)));
                 tty.WriteLine("Starting Neptune...");
                 NDEManager.Initialize();
-                Sys.FileSystem.CosmosVFS fs = new Sys.FileSystem.CosmosVFS();
+                fs = new Sys.FileSystem.CosmosVFS();
                 Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
                 TerminalLogger.LogTerminal = 0;
                 TerminalLogger.Log("NKernel", "File system initialized!", LogType.Ok);
@@ -101,6 +102,7 @@ namespace Neptune
                         tty.Write(nsh.GetFullPath()+"> ");
                         string cmd = tty.ReadLine();
                         nsh.Command(cmd);
+                        Heap.Collect();
                     }
                     catch (Exception e)
                     {

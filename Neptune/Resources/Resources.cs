@@ -13,7 +13,9 @@ namespace Neptune.NDE
         [ManifestResourceStream(ResourceName = "Neptune.Resources.cursor.bmp")]
         public static byte[] cursorbytes;
         public static Canvas cursor;
-        [ManifestResourceStream(ResourceName = "Neptune.Resources.cascadia.acf")]
-        public static byte[] cascadia;
+        [ManifestResourceStream(ResourceName = "Neptune.Resources.vga.acf")]
+        public static byte[] vga12;
+        [ManifestResourceStream(ResourceName = "Neptune.Resources.vga18.acf")]
+        public static byte[] vga18;
     }
 }

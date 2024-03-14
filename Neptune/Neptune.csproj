@@ -22,13 +22,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Resources\cascadia.acf" />
       <None Remove="Resources\cursor.bmp" />
+      <None Remove="Resources\vga.acf" />
+      <None Remove="Resources\vga18.acf" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Resources\cascadia.acf" />
       <EmbeddedResource Include="Resources\cursor.bmp" />
+      <EmbeddedResource Include="Resources\vga.acf" />
+      <EmbeddedResource Include="Resources\vga18.acf" />
     </ItemGroup>
 
     <ItemGroup>

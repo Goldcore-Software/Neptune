@@ -1,6 +1,9 @@
-﻿using IL2CPU.API.Attribs;
+﻿using Cosmos.System.FileSystem;
+using IL2CPU.API.Attribs;
 using Neptune.NDE;
+using SVGAIITerminal.TextKit;
 using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 
 namespace Neptune.Terminal
@@ -131,12 +134,12 @@ namespace Neptune.Terminal
                         }
                         break;
                     case "setup":
-                        Kernel.tty.WriteLine("Setting up system drive...", 0);
+                        Kernel.tty.WriteLine("Setting up system drive...");
                         Directory.CreateDirectory(CurrentVol + @":\Neptune");
                         Kernel.SystemDrive = int.Parse(CurrentVol);
-                        Config.DefaultPath = Kernel.SystemDrive + @":\Neptune\sys.reg";
-                        Config.SaveReg(CurrentVol + @":\Neptune\sys.reg");
-                        Kernel.tty.WriteLine("You must reboot the system to finish setting up the system drive.", 0);
+                        Config.DefaultPath = CurrentVol + @":\Neptune\sys.conf";
+                        Config.SaveReg();
+                        Kernel.tty.WriteLine("You must reboot the system to finish setting up the system drive.");
                         break;
                     case "reboot":
                         Kernel.tty.WriteLine("Restarting...", 0);
@@ -152,6 +155,47 @@ namespace Neptune.Terminal
                         break;
                     case "ver":
                         Kernel.tty.WriteLine(Kernel.VersionString);
+                        break;
+                    case "font":
+                        switch (cmdsplit[1])
+                        {
+                            case "12":
+                                Kernel.tty = new SVGAIITerminal.SVGAIITerminal(800, 600, new AcfFontFace(new MemoryStream(Resources.vga12)));
+                                Kernel.tty.Clear();
+                                break;
+                            case "18":
+                                Kernel.tty = new SVGAIITerminal.SVGAIITerminal(800, 600, new AcfFontFace(new MemoryStream(Resources.vga18)));
+                                Kernel.tty.Clear();
+                                break;
+                            default:
+                                Kernel.tty.WriteLine("Font does not exist.");
+                                break;
+                        }
+                        break;
+                    case "format":
+                        try
+                        {
+                            var dindex = int.Parse(cmdsplit[1]);
+                            var pindex = int.Parse(cmdsplit[2]);
+                        }
+                        catch (Exception)
+                        {
+                            Kernel.tty.WriteLine("Usage: format <disk index> <partition index>");
+                        }
+                        Kernel.fs.Disks[0].FormatPartition(0, "FAT32", true);
+                        break;
+                    case "diskinfo":
+                        var disk = 0;
+                        foreach (var item in Kernel.fs.Disks)
+                        {
+                            Kernel.tty.WriteLine("== DISK "+disk.ToString()+" ==");
+                            foreach (var part in item.Partitions)
+                            {
+                                Kernel.tty.WriteLine(part.RootPath+" - Formatted: "+part.HasFileSystem.ToString());
+                            }
+                            disk++;
+                            Kernel.tty.WriteLine();
+                        }
                         break;
                     case "":
                         break;
